@@ -1,0 +1,56 @@
+.pyra--mixins__spacing(@variable, @spacing:(@pyra--global__spacing-denominator * 16))when(@spacing>-1) {
+  .pyra--mixins__spacing(@variable, @spacing - 1);
+  @selector: extract(@variable, 1);
+  @style: extract(@variable, 2);
+  @hover: extract(@variable, 3);
+  @focus: extract(@variable, 4);
+  @responsive: extract(@variable, 5);
+  .pyra--mixins__spacing__output(@selector, @style, @spacing);
+  .pyra--mixins__spacing__output(~'hover\:@{selector}', @style, @spacing, ~':hover',@hover);
+  .pyra--mixins__spacing__output(~'focus\:@{selector}', @style, @spacing, ~':focus',@focus);
+  .pyra--mixins__spacing__responsive(@selector, @style, @spacing, @responsive);
+}
+.pyra--mixins__spacing__responsive(@selector, @style, @spacing, @bool, @i:length(@pyra--global__responsive-sizes))when(@i>0)
+  and(@bool=true) {
+  .pyra--mixins__spacing__responsive(@selector, @style, @spacing, @i - 1);
+  @responsive__id: extract(extract(@pyra--global__responsive-sizes, @i), 1);
+  @size: extract(extract(@pyra--global__responsive-sizes, @i), 2);
+  @media only screen and( min-width:@size ) {
+    .pyra--mixins__spacing__output(~'@{responsive__id}\:@{selector}', @style, @spacing);
+  }
+}
+.pyra--mixins__spacing__output( @selector, @style, @spacing, @pseudo:~'', @bool:true)when(@bool=true) {
+  @css-selector: ~'@{pyra--global__css__id}.@{selector}';
+  @{css-selector}-@{spacing}@{pseudo} {
+    @{style}: @pyra--global__spacing * @spacing /
+      @pyra--global__spacing-denominator;
+  }
+  @{css-selector}@{pyra--global__modifier-x}-@{spacing}@{pseudo} {
+    @{style}-left: @pyra--global__spacing * @spacing /
+      @pyra--global__spacing-denominator;
+    @{style}-right: @pyra--global__spacing * @spacing /
+      @pyra--global__spacing-denominator;
+  }
+  @{css-selector}@{pyra--global__modifier-y}-@{spacing}@{pseudo} {
+    @{style}-bottom: @pyra--global__spacing * @spacing /
+      @pyra--global__spacing-denominator;
+    @{style}-top: @pyra--global__spacing * @spacing /
+      @pyra--global__spacing-denominator;
+  }
+  @{css-selector}@{pyra--global__modifier-b}-@{spacing}@{pseudo} {
+    @{style}-bottom: @pyra--global__spacing * @spacing /
+      @pyra--global__spacing-denominator;
+  }
+  @{css-selector}@{pyra--global__modifier-l}-@{spacing}@{pseudo} {
+    @{style}-left: @pyra--global__spacing * @spacing /
+      @pyra--global__spacing-denominator;
+  }
+  @{css-selector}@{pyra--global__modifier-r}-@{spacing}@{pseudo} {
+    @{style}-right: @pyra--global__spacing * @spacing /
+      @pyra--global__spacing-denominator;
+  }
+  @{css-selector}@{pyra--global__modifier-t}-@{spacing}@{pseudo} {
+    @{style}-top: @pyra--global__spacing * @spacing /
+      @pyra--global__spacing-denominator;
+  }
+}

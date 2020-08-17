@@ -1,0 +1,41 @@
+.pyra--mixins__color(@variable, @i:length(@pyra--global__colors))when(@i>0) {
+  .pyra--mixins__color(@variable, @i - 1);
+  @selector: extract(@variable, 1);
+  @style: extract(@variable, 2);
+  @hover: extract(@variable, 3);
+  @focus: extract(@variable, 4);
+  @responsive: extract(@variable, 5);
+  @color: extract(extract(@pyra--global__colors, @i), 1);
+  @value: extract(extract(@pyra--global__colors, @i), 2);
+  @shades: extract(extract(@pyra--global__colors, @i), 3);
+  .pyra--mixins__color__output('@{selector}-@{color}', @style, @value);
+  .pyra--mixins__color__output('hover\:@{selector}-@{color}', @style, @value, ~':hover', @hover);
+  .pyra--mixins__color__output('focus\:@{selector}-@{color}', @style, @value, ~':focus', @focus);
+  .pyra--mixins__color__responsive('@{selector}-@{color}', @style, @value, @responsive, @shades);
+  .pyra--mixins__color__shades('@{selector}-@{color}', @style, @value, ~'', true, @shades, @focus, @hover, @responsive);
+}
+.pyra--mixins__color__output(@selector, @style, @value, @pseudo:~'', @bool:true)when(@bool=true) {
+  @css-selector: ~'@{pyra--global__css__id}.@{selector}';
+  @{css-selector}@{pseudo} {
+    @{style}: @value;
+  }
+}
+.pyra--mixins__color__responsive(@selector, @style, @value, @bool, @shades, @j:length(@pyra--global__responsive-sizes))when(@j>0)
+  and(@bool=true)and(@shades=true) {
+  .pyra--mixins__color__responsive(@selector, @style, @value, @bool, @shades, @j - 1);
+  @responsive__id: extract(extract(@pyra--global__responsive-sizes, @j), 1);
+  @size: extract(extract(@pyra--global__responsive-sizes, @j), 2);
+
+  @media only screen and( min-width:@size ) {
+    .pyra--mixins__color__shades(~'@{responsive__id}\:@{selector}', @style, @value, ~'', @bool, @shades, false, false, false);
+  }
+}
+.pyra--mixins__color__shades(@selector, @style, @hex, @pseudo:~'', @bool:true, @shades, @focus, @hover, @responsive, @i:length(@pyra--global__colors__shades))when(@bool=true)and(@shades=true)and(@i>0) {
+  .pyra--mixins__color__shades(@selector, @style, @hex, @pseudo, @bool, @shades, @focus, @hover, @responsive, @i - 1);
+  @mix: extract(extract(@pyra--global__colors__shades, @i), 1);
+  @percent: extract(extract(@pyra--global__colors__shades, @i), 2);
+  @value: mix(@mix, @hex, @percent);
+  .pyra--mixins__color__output('@{selector}-@{i}00', @style, @value);
+  .pyra--mixins__color__output('hover\:@{selector}-@{color}-@{i}00', @style, @value, ~':hover', @hover);
+  .pyra--mixins__color__output('focus\:@{selector}-@{color}-@{i}00', @style, @value, ~':focus', @focus);
+}

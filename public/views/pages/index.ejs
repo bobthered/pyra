@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pyra</title>
+    <link rel="stylesheet" href="/css/pyra.css" />
+  </head>
+  <body class="sm:bg-gray-600 md:bg-gray-700 lg:bg-red-800 xl:bg-gray-900">
+    <% for ( var i = 0; i < 65; i++) { if ( i > 24 ) { i = i+7; } else if ( i >
+    12 ) { i = i+3; } else if ( i > 6 ) { i = i+1 } %>
+    <button class="p-<%= i %>">
+      Padding <%= i %>
+    </button>
+    <% } %>
+  </body>
+</html>
